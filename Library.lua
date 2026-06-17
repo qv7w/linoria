@@ -1154,7 +1154,12 @@ do
 
             ContainerLabel.Text = string.format('[%s] %s (%s)', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
-            ContainerLabel.Visible = true;
+            local isVisible = (KeyPicker.Value ~= 'None')
+            if isVisible and ParentObj and ParentObj.Type == 'Toggle' then
+                isVisible = ParentObj.Value
+            end
+
+            ContainerLabel.Visible = isVisible;
             ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
 
             Library.RegistryMap[ContainerLabel].Properties.TextColor3 = State and 'AccentColor' or 'FontColor';
@@ -1917,8 +1922,10 @@ do
             Toggle:Display();
 
             for _, Addon in next, Toggle.Addons do
-                if Addon.Type == 'KeyPicker' and Addon.SyncToggleState then
-                    Addon.Toggled = Bool
+                if Addon.Type == 'KeyPicker' then
+                    if Addon.SyncToggleState then
+                        Addon.Toggled = Bool
+                    end
                     Addon:Update()
                 end
             end
