@@ -1154,7 +1154,11 @@ do
 
             ContainerLabel.Text = string.format('[%s] %s (%s)', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
-            ContainerLabel.Visible = true;
+            local parentEnabled = true;
+            if ParentObj and ParentObj.Type == 'Toggle' then
+                parentEnabled = ParentObj.Value;
+            end;
+            ContainerLabel.Visible = parentEnabled;
             ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
 
             Library.RegistryMap[ContainerLabel].Properties.TextColor3 = State and 'AccentColor' or 'FontColor';
@@ -1918,8 +1922,10 @@ do
             Toggle:Display();
 
             for _, Addon in next, Toggle.Addons do
-                if Addon.Type == 'KeyPicker' and Addon.SyncToggleState then
-                    Addon.Toggled = Bool
+                if Addon.Type == 'KeyPicker' then
+                    if Addon.SyncToggleState then
+                        Addon.Toggled = Bool
+                    end
                     Addon:Update()
                 end
             end
@@ -2835,13 +2841,19 @@ do
 end;
 
 function Library:SetWatermarkVisibility(Bool)
+    Library.WatermarkEnabled = Bool;
     Library.Watermark.Visible = Bool;
 end;
 
 function Library:SetWatermark(Text)
     local X, Y = Library:GetTextBounds(Text, Library.Font, 14);
     Library.Watermark.Size = UDim2.new(0, X + 15, 0, (Y * 1.5) + 3);
-    Library:SetWatermarkVisibility(true)
+    
+    if Library.WatermarkEnabled ~= false then
+        Library.Watermark.Visible = true;
+    else
+        Library.Watermark.Visible = false;
+    end
 
     Library.WatermarkText.Text = Text;
 end;
