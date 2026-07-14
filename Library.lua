@@ -1611,15 +1611,15 @@ local Library = {
                 ContextMenu.Instance.Visible = false
             end)
 
-            Items["ColorpickerButton"]:Connect("InputBegan", function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-                    ContextMenu.Instance.Position = UDim2.new(0, Mouse.X + 5, 0, Mouse.Y + 5)
-                    ContextMenu.Instance.Visible = true
-                end
-            end)
-
             Library:Connect(UserInputService.InputBegan, function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                    if Items["ColorpickerButton"]:IsMouseOverFrame() then
+                        ContextMenu.Instance.Position = UDim2.new(0, Mouse.X + 5, 0, Mouse.Y + 5)
+                        ContextMenu.Instance.Visible = true
+                    elseif ContextMenu.Instance.Visible and not ContextMenu:IsMouseOverFrame() then
+                        ContextMenu.Instance.Visible = false
+                    end
+                elseif Input.UserInputType == Enum.UserInputType.MouseButton1 then
                     if ContextMenu.Instance.Visible and not ContextMenu:IsMouseOverFrame() then
                         ContextMenu.Instance.Visible = false
                     end
