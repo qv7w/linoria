@@ -1561,7 +1561,8 @@ local Library = {
                 BackgroundColor3 = Library.Theme.BackgroundColor,
                 BorderSizePixel = 1,
                 BorderColor3 = Library.Theme.OutlineColor,
-                ZIndex = 50,
+                ZIndex = 99999,
+                Active = true
             })
             ContextMenu:AddToTheme({BackgroundColor3 = "BackgroundColor", BorderColor3 = "OutlineColor"})
 
@@ -1575,7 +1576,9 @@ local Library = {
                 BackgroundColor3 = Library.Theme.BackgroundColor,
                 TextColor3 = Library.Theme.TextColor,
                 BorderSizePixel = 0,
-                ZIndex = 50,
+                ZIndex = 99999,
+                AutoButtonColor = true,
+                Active = true
             })
             CopyBtn:AddToTheme({BackgroundColor3 = "BackgroundColor", TextColor3 = "TextColor"})
 
@@ -1589,7 +1592,9 @@ local Library = {
                 BackgroundColor3 = Library.Theme.BackgroundColor,
                 TextColor3 = Library.Theme.TextColor,
                 BorderSizePixel = 0,
-                ZIndex = 50,
+                ZIndex = 99999,
+                AutoButtonColor = true,
+                Active = true
             })
             PasteBtn:AddToTheme({BackgroundColor3 = "BackgroundColor", TextColor3 = "TextColor"})
             Library:Create("UIListLayout", { Parent = ContextMenu.Instance })
@@ -1606,14 +1611,16 @@ local Library = {
                 ContextMenu.Instance.Visible = false
             end)
 
-            Items["ColorpickerButton"]:Connect("MouseButton2Down", function()
-                ContextMenu.Instance.Position = UDim2.new(0, Mouse.X, 0, Mouse.Y)
-                ContextMenu.Instance.Visible = true
+            Items["ColorpickerButton"]:Connect("InputBegan", function(Input)
+                if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+                    ContextMenu.Instance.Position = UDim2.new(0, Mouse.X + 5, 0, Mouse.Y + 5)
+                    ContextMenu.Instance.Visible = true
+                end
             end)
 
             Library:Connect(UserInputService.InputBegan, function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.MouseButton2 then
-                    if ContextMenu.Instance.Visible and not ContextMenu:IsMouseOverFrame() and not Items["ColorpickerButton"]:IsMouseOverFrame() then
+                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    if ContextMenu.Instance.Visible and not ContextMenu:IsMouseOverFrame() then
                         ContextMenu.Instance.Visible = false
                     end
                 end
